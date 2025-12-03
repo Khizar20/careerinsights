@@ -1,0 +1,47 @@
+Financial Analyst Career
+
+A Financial Analyst evaluates financial data to help businesses and investors make informed decisions. They build models, analyze trends, and provide insights on performance and risk.
+
+Key Responsibilities:
+- Analyze financial statements and performance metrics
+- Build financial models and forecasts
+- Conduct market and industry research
+- Prepare reports and presentations for management or clients
+- Support budgeting and strategic planning
+
+Required Skills:
+- Strong understanding of accounting and corporate finance
+- Excel and spreadsheet modeling
+- Data analysis and visualization
+- Attention to detail and quantitative reasoning
+- Communication of complex ideas in simple terms
+
+Suitable Personality Traits:
+- Analytical and detail-oriented
+- Comfortable with numbers and data
+- Curious about markets and business performance
+
+Typical Pathways:
+- Degree in Finance, Accounting, Economics, or related field
+- Internships in finance, banking, or corporate roles
+- Professional certifications to advance
+
+Learning Roadmap:
+1. Accounting and financial statement analysis
+2. Corporate finance and valuation techniques
+3. Excel modeling and basic programming (Python/R is a plus)
+4. Industry-specific knowledge (e.g., tech, healthcare, banking)
+
+Tools, Technologies, Certifications:
+- Tools: Excel, Power BI/Tableau, Bloomberg/financial databases
+- Certifications: CFA, FRM, Financial Modeling certifications
+
+Example Work Scenarios:
+- Building a discounted cash flow (DCF) model for a project
+- Analyzing quarterly performance vs budget
+- Preparing investor or board presentations
+
+Career Opportunities:
+Financial Analyst, Investment Analyst, Equity Research Associate, Corporate Finance Analyst
+
+

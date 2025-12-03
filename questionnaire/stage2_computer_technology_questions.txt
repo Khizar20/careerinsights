@@ -1,0 +1,122 @@
+Stage 2: Computer Technology Domain Questions
+
+1. What aspect of software and technology work interests you most?
+   a) Frontend development and user interfaces (UI/UX)
+   b) Backend systems, APIs, and server architecture
+   c) Data science, analytics, and machine learning
+   d) Mobile app development
+   e) Cybersecurity, ethical hacking, and system security
+   f) Cloud infrastructure, DevOps, and automation
+
+2. Which programming language would you prefer to learn first?
+   a) Python (versatile and beginner-friendly)
+   b) JavaScript (web development)
+   c) Java (enterprise applications)
+   d) C++ (system programming)
+   e) Swift/Kotlin (mobile development)
+   f) Multiple languages
+
+3. How do you prefer to solve coding problems?
+   a) Research and read documentation thoroughly
+   b) Experiment with code and test solutions
+   c) Discuss with peers and collaborate
+   d) Break down into smaller problems
+   e) Use debugging tools systematically
+   f) Combine multiple approaches
+
+4. What type of projects excite you most?
+   a) Web and UI/UX design projects focused on user experience
+   b) Building robust backend services and APIs
+   c) Data-heavy projects (dashboards, analytics, ML models)
+   d) Mobile or cross-platform apps
+   e) Security projects (penetration testing, securing systems)
+   f) Infrastructure/DevOps projects (CI/CD, cloud, automation)
+
+5. How important is working with cutting-edge technology?
+   a) Very important - I want the latest tools
+   b) Important - but stability matters too
+   c) Moderate - proven technologies are fine
+   d) Not very important - I prefer established tools
+   e) Depends on the project requirements
+   f) I enjoy learning new technologies
+
+6. What size of team do you prefer working with?
+   a) Solo or very small teams (2-3 people)
+   b) Small teams (4-8 people)
+   c) Medium teams (9-15 people)
+   d) Large teams (16+ people)
+   e) Flexible - depends on the project
+   f) I enjoy various team sizes
+
+7. How do you handle debugging complex issues?
+   a) Systematic step-by-step debugging
+   b) Using debugging tools and logs
+   c) Asking for help from team members
+   d) Researching similar issues online
+   e) Taking breaks and returning with fresh eyes
+   f) Multiple debugging strategies
+
+8. What type of work environment do you prefer for coding?
+   a) Quiet individual workspace
+   b) Collaborative open office
+   c) Remote work from home
+   d) Flexible hybrid arrangement
+   e) Pair programming setup
+   f) Any environment that's productive
+
+9. How do you stay updated with technology trends?
+   a) Reading tech blogs and articles daily
+   b) Taking online courses regularly
+   c) Attending conferences and meetups
+   d) Working on personal projects
+   e) Following tech communities online
+   f) Combination of multiple methods
+
+10. What motivates you in software development?
+    a) Solving complex technical challenges
+    b) Creating products that users love
+    c) Learning new technologies and skills
+    d) Building scalable and efficient systems
+    e) Contributing to open-source projects
+    f) Career growth and opportunities
+
+11. How do you prefer to learn new technologies?
+    a) Hands-on coding and building projects
+    b) Structured courses and tutorials
+    c) Reading documentation and books
+    d) Watching video tutorials
+    e) Pair programming with experienced developers
+    f) Combination of methods
+
+12. What is your approach to code quality?
+    a) Write clean, well-documented code from the start
+    b) Get it working first, then refactor
+    c) Follow strict coding standards and best practices
+    d) Focus on functionality over perfection
+    e) Continuous improvement and refactoring
+    f) Balance between speed and quality
+
+13. How do you handle tight deadlines?
+    a) Plan carefully and work systematically
+    b) Prioritize critical features first
+    c) Work extra hours to meet deadlines
+    d) Communicate early about challenges
+    e) Focus on core functionality
+    f) Adapt and adjust as needed
+
+14. What type of software problems interest you?
+    a) Algorithm optimization and performance
+    b) User experience and interface design
+    c) System architecture and scalability
+    d) Data processing and analysis
+    e) Security and system protection
+    f) Integration and system connectivity
+
+15. What career path in tech appeals to you most?
+    a) Software Engineer / Full-Stack Developer
+    b) Data Scientist / ML Engineer
+    c) DevOps Engineer / Cloud Engineer
+    d) Cybersecurity Engineer / Security Specialist
+    e) UI/UX Designer / Product Designer
+    f) Open to multiple tech roles depending on opportunity
+

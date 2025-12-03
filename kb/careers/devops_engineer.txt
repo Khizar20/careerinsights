@@ -1,0 +1,52 @@
+DevOps Engineer Career
+
+A DevOps Engineer bridges development and operations to enable faster, more reliable software delivery. They automate infrastructure, manage CI/CD pipelines, and ensure systems are scalable, observable, and resilient.
+
+Key Responsibilities:
+- Design and maintain CI/CD pipelines
+- Automate infrastructure provisioning and configuration
+- Monitor application performance and system health
+- Implement logging, alerting, and observability
+- Manage containerization and orchestration (Docker, Kubernetes)
+- Collaborate with developers to improve deployment workflows
+
+Required Skills:
+- Strong understanding of Linux and networking
+- Experience with CI/CD tools (GitHub Actions, GitLab CI, Jenkins, etc.)
+- Infrastructure as Code (Terraform, Ansible, CloudFormation)
+- Containerization (Docker) and orchestration (Kubernetes)
+- Cloud platforms (AWS, Azure, GCP)
+- Scripting (Bash, Python)
+
+Suitable Personality Traits:
+- Problem solver and systems thinker
+- Enjoys automation and tooling
+- Comfortable working across teams
+- Calm and methodical under pressure
+
+Typical Pathways:
+- Background in system administration or backend development
+- Bachelor's degree in CS/IT or related field
+- Cloud and DevOps certifications plus hands-on project work
+
+Learning Roadmap:
+1. Linux, networking, and shell scripting
+2. Git and basic CI/CD concepts
+3. Containers and Kubernetes fundamentals
+4. Infrastructure as Code and cloud services
+5. Observability, reliability, and scaling
+
+Tools, Technologies, Certifications:
+- Tools: Docker, Kubernetes, Terraform, Ansible, Prometheus, Grafana
+- Platforms: AWS, Azure, GCP
+- Certifications: AWS DevOps Engineer, CKA, Terraform Associate
+
+Example Work Scenarios:
+- Creating a CI/CD pipeline that runs tests and deploys automatically
+- Migrating services to Kubernetes
+- Troubleshooting a production outage related to deployment
+
+Career Opportunities:
+DevOps Engineer, Site Reliability Engineer (SRE), Cloud Engineer, Platform Engineer
+
+

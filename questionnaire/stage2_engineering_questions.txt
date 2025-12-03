@@ -1,0 +1,122 @@
+Stage 2: Engineering Domain Questions
+
+1. What type of engineering problems interest you most?
+   a) Structural design and analysis
+   b) Mechanical systems and machines
+   c) Electrical and electronic systems
+   d) Environmental and sustainability
+   e) Materials and manufacturing
+   f) Systems integration
+
+2. How do you prefer to approach engineering design?
+   a) Mathematical modeling and calculations
+   b) CAD software and 3D modeling
+   c) Prototyping and testing
+   d) Research and literature review
+   e) Collaborative brainstorming
+   f) Combination of methods
+
+3. What type of engineering projects excite you?
+   a) Large infrastructure projects
+   b) Product design and development
+   c) Research and innovation
+   d) Environmental solutions
+   e) Manufacturing processes
+   f) System optimization
+
+4. How important is hands-on work to you?
+   a) Very important - I prefer field work
+   b) Important - mix of office and field
+   c) Moderate - I enjoy both
+   d) Less important - I prefer design work
+   e) I'm flexible with work types
+   f) Depends on the project
+
+5. What type of engineering environment do you prefer?
+   a) Construction sites and field work
+   b) Design office and CAD work
+   c) Manufacturing facility
+   d) Research laboratory
+   e) Consulting firm
+   f) Various environments
+
+6. How do you handle engineering calculations and analysis?
+   a) Manual calculations and formulas
+   b) Engineering software and tools
+   c) Spreadsheet analysis
+   d) Computer simulations
+   e) Combination of methods
+   f) Prefer software tools
+
+7. What motivates you most in engineering?
+   a) Building tangible structures and systems
+   b) Solving complex technical problems
+   c) Innovation and new technologies
+   d) Environmental and sustainability impact
+   e) Safety and reliability
+   f) Project completion and success
+
+8. How do you prefer to learn new engineering concepts?
+   a) Hands-on projects and experiments
+   b) Theoretical study and textbooks
+   c) Software tutorials and training
+   d) Working with experienced engineers
+   e) Online courses and videos
+   f) Combination of methods
+
+9. What type of engineering team do you prefer?
+   a) Large multidisciplinary teams
+   b) Small focused teams
+   c) Individual work with collaboration
+   d) Research teams
+   e) Field teams
+   f) Flexible team structures
+
+10. How important is professional licensing to you?
+    a) Very important - I want PE license
+    b) Important - I'll pursue it
+    c) Moderate - depends on career path
+    d) Less important - not required for my path
+    e) I'm open to licensing
+    f) I'll evaluate based on opportunities
+
+11. What type of engineering challenges interest you?
+    a) Structural integrity and safety
+    b) System optimization and efficiency
+    c) Material selection and properties
+    d) Environmental impact and sustainability
+    e) Manufacturing and production
+    f) Innovation and new technologies
+
+12. How do you prefer to document engineering work?
+    a) Technical drawings and CAD files
+    b) Written reports and specifications
+    c) Calculations and analysis documents
+    d) Presentations and proposals
+    e) Digital documentation systems
+    f) Combination of methods
+
+13. What role do you see yourself in engineering?
+    a) Design Engineer
+    b) Project Engineer
+    c) Research Engineer
+    d) Field Engineer
+    e) Engineering Manager
+    f) Consulting Engineer
+
+14. How do you handle engineering project deadlines?
+    a) Careful planning and time management
+    b) Prioritizing critical tasks
+    c) Working extra hours when needed
+    d) Communicating early about challenges
+    e) Efficient work processes
+    f) Adaptive project management
+
+15. What career path in engineering appeals to you?
+    a) Civil Engineering
+    b) Mechanical Engineering
+    c) Electrical Engineering
+    d) Environmental Engineering
+    e) Industrial Engineering
+    f) General Engineering
+
