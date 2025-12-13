@@ -151,3 +151,5 @@ careerinsights/
 - Make sure MongoDB is running before starting the backend
 - Firebase Authentication must be enabled before using the app
 
+
+
