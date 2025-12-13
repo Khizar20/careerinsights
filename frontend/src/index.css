@@ -10,6 +10,8 @@ body {
     'Helvetica Neue', Arial, sans-serif;
   background: #0b2c6d;
   color: #0b1f3b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -25,4 +27,3 @@ button {
   min-height: 100vh;
   background: linear-gradient(135deg, #0b2c6d 0%, #1155c4 45%, #1e9ff5 100%);
 }
-

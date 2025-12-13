@@ -24,6 +24,15 @@ frontend/.env
 # Firebase config (contains API keys)
 frontend/src/firebase.js
 
+# Data files
+data/
+*.index
+*.pkl
+*.json
+!questionnaire/*.txt
+!kb/**/*.txt
+!evaluation/ground_truth.json
+
 # IDE
 .vscode/
 .idea/
@@ -68,6 +77,3 @@ coverage.xml
 # Data files (if sensitive)
 # backend/data/*.csv
 # Uncomment above if you don't want to commit CSV files
-
-
-
