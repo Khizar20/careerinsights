@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { User, Mail, BookOpen, Heart, Award } from 'lucide-react'
+import { User, BookOpen, Heart, Award } from 'lucide-react'
 import axios from 'axios'
 
-export default function IntakeForm({ onComplete }) {
-  const navigate = useNavigate()
+export default function IntakeForm({ onComplete, navigate: customNavigate }) {
+  const routerNavigate = useNavigate()
+  const navigate = customNavigate || routerNavigate
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -20,7 +21,6 @@ export default function IntakeForm({ onComplete }) {
     const errors = {}
 
     const name = formData.name.trim()
-    // Name: letters and spaces only
     const namePattern = /^[A-Za-z\s]+$/
     if (!name) {
       errors.name = 'Name is required.'
@@ -45,19 +45,17 @@ export default function IntakeForm({ onComplete }) {
 
     const interestsRaw = formData.interests
     const interests = interestsRaw.trim()
-    // Interests: letters, spaces, and basic punctuation like , . : ; ! ? & - ( )
     const interestsPattern = /^[A-Za-z\s0-9,.:;!?\-&()']+$/
     if (!interests) {
       errors.interests = 'Please share a few of your interests.'
     } else if (!interestsPattern.test(interestsRaw)) {
-      errors.interests = 'Interests can only contain letters, numbers, spaces, and basic punctuation (, . : ; ! ? - & () \').'
+      errors.interests = 'Interests can only contain letters, numbers, spaces, and basic punctuation.'
     } else if (interests.length < 10) {
       errors.interests = 'Interests should be at least 10 characters for better recommendations.'
     }
 
     const skillsRaw = formData.skills
     const skills = skillsRaw.trim()
-    // Skills: letters, numbers, commas, spaces
     const skillsPattern = /^[A-Za-z0-9,\s]+$/
     if (!skills) {
       errors.skills = 'Please list some of your key skills.'
@@ -98,40 +96,89 @@ export default function IntakeForm({ onComplete }) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Career Counseling</h2>
-          <p className="text-gray-600">Let's start by learning about you</p>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px' }}>
+      <div style={{
+        background: 'rgba(15, 23, 42, 0.8)',
+        borderRadius: '16px',
+        padding: '40px',
+        border: '1px solid rgba(30, 159, 245, 0.2)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h2 style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: 700, 
+            color: '#e5e7eb', 
+            marginBottom: '8px' 
+          }}>
+            Welcome to Career <span style={{ color: '#10b981' }}>Counseling</span>
+          </h2>
+          <p style={{ color: '#9ca3af', fontSize: '1.1rem' }}>
+            Let's start by learning about you
+          </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          <div style={{
+            marginBottom: '24px',
+            padding: '16px',
+            background: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid #ef4444',
+            borderRadius: '8px',
+            color: '#ef4444'
+          }}>
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div>
-            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2">
-              <User className="h-4 w-4" />
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              fontSize: '0.95rem', 
+              fontWeight: 500, 
+              color: '#e5e7eb', 
+              marginBottom: '8px' 
+            }}>
+              <User size={18} color="#1e9ff5" />
               <span>Name</span>
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                border: '1px solid #1f2937',
+                background: '#020617',
+                color: '#e5e7eb',
+                fontSize: '1rem',
+                fontFamily: 'inherit'
+              }}
               placeholder="Enter your name"
             />
             {fieldErrors.name && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.name}</p>
+              <p style={{ marginTop: '6px', fontSize: '0.875rem', color: '#ef4444' }}>
+                {fieldErrors.name}
+              </p>
             )}
           </div>
 
           <div>
-            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2">
-              <User className="h-4 w-4" />
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              fontSize: '0.95rem', 
+              fontWeight: 500, 
+              color: '#e5e7eb', 
+              marginBottom: '8px' 
+            }}>
+              <User size={18} color="#1e9ff5" />
               <span>Age</span>
             </label>
             <input
@@ -140,77 +187,177 @@ export default function IntakeForm({ onComplete }) {
               max="100"
               value={formData.age}
               onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                border: '1px solid #1f2937',
+                background: '#020617',
+                color: '#e5e7eb',
+                fontSize: '1rem',
+                fontFamily: 'inherit'
+              }}
               placeholder="Enter your age"
             />
             {fieldErrors.age && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.age}</p>
+              <p style={{ marginTop: '6px', fontSize: '0.875rem', color: '#ef4444' }}>
+                {fieldErrors.age}
+              </p>
             )}
           </div>
 
           <div>
-            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2">
-              <BookOpen className="h-4 w-4" />
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              fontSize: '0.95rem', 
+              fontWeight: 500, 
+              color: '#e5e7eb', 
+              marginBottom: '8px' 
+            }}>
+              <BookOpen size={18} color="#1e9ff5" />
               <span>Education Level</span>
             </label>
             <select
               value={formData.education}
               onChange={(e) => setFormData({ ...formData, education: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                border: '1px solid #1f2937',
+                background: '#020617',
+                color: '#e5e7eb',
+                fontSize: '1rem',
+                fontFamily: 'inherit',
+                cursor: 'pointer'
+              }}
             >
-              <option value="">Select your highest education level</option>
-              <option value="High School">High School</option>
-              <option value="Diploma / Associate Degree">Diploma / Associate Degree</option>
-              <option value="Bachelor's Degree">Bachelor's Degree</option>
-              <option value="Master's Degree">Master's Degree</option>
-              <option value="PhD / Doctorate">PhD / Doctorate</option>
-              <option value="Other">Other</option>
+              <option value="" style={{ background: '#020617', color: '#9ca3af' }}>
+                Select your highest education level
+              </option>
+              <option value="High School" style={{ background: '#020617' }}>High School</option>
+              <option value="Diploma / Associate Degree" style={{ background: '#020617' }}>Diploma / Associate Degree</option>
+              <option value="Bachelor's Degree" style={{ background: '#020617' }}>Bachelor's Degree</option>
+              <option value="Master's Degree" style={{ background: '#020617' }}>Master's Degree</option>
+              <option value="PhD / Doctorate" style={{ background: '#020617' }}>PhD / Doctorate</option>
+              <option value="Other" style={{ background: '#020617' }}>Other</option>
             </select>
             {fieldErrors.education && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.education}</p>
+              <p style={{ marginTop: '6px', fontSize: '0.875rem', color: '#ef4444' }}>
+                {fieldErrors.education}
+              </p>
             )}
           </div>
 
           <div>
-            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2">
-              <Heart className="h-4 w-4" />
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              fontSize: '0.95rem', 
+              fontWeight: 500, 
+              color: '#e5e7eb', 
+              marginBottom: '8px' 
+            }}>
+              <Heart size={18} color="#1e9ff5" />
               <span>Interests</span>
             </label>
             <textarea
               value={formData.interests}
               onChange={(e) => setFormData({ ...formData, interests: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                border: '1px solid #1f2937',
+                background: '#020617',
+                color: '#e5e7eb',
+                fontSize: '1rem',
+                fontFamily: 'inherit',
+                resize: 'vertical',
+                minHeight: '100px'
+              }}
               placeholder="e.g., Programming, Medicine, Business"
               rows="3"
             />
             {fieldErrors.interests && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.interests}</p>
+              <p style={{ marginTop: '6px', fontSize: '0.875rem', color: '#ef4444' }}>
+                {fieldErrors.interests}
+              </p>
             )}
           </div>
 
           <div>
-            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2">
-              <Award className="h-4 w-4" />
+            <label style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', 
+              fontSize: '0.95rem', 
+              fontWeight: 500, 
+              color: '#e5e7eb', 
+              marginBottom: '8px' 
+            }}>
+              <Award size={18} color="#1e9ff5" />
               <span>Skills</span>
             </label>
             <textarea
               value={formData.skills}
               onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              style={{
+                width: '100%',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                border: '1px solid #1f2937',
+                background: '#020617',
+                color: '#e5e7eb',
+                fontSize: '1rem',
+                fontFamily: 'inherit',
+                resize: 'vertical',
+                minHeight: '100px'
+              }}
               placeholder="e.g., Python, Communication, Leadership"
               rows="3"
             />
             {fieldErrors.skills && (
-              <p className="mt-1 text-sm text-red-600">{fieldErrors.skills}</p>
+              <p style={{ marginTop: '6px', fontSize: '0.875rem', color: '#ef4444' }}>
+                {fieldErrors.skills}
+              </p>
             )}
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{
+              width: '100%',
+              padding: '14px 24px',
+              borderRadius: '8px',
+              border: 'none',
+              background: loading ? '#6b7280' : 'linear-gradient(135deg, #1e9ff5, #3b82f6)',
+              color: '#ffffff',
+              fontWeight: 600,
+              fontSize: '1rem',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              marginTop: '8px',
+              boxShadow: loading ? 'none' : '0 4px 12px rgba(30, 159, 245, 0.3)',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) {
+                e.target.style.transform = 'translateY(-2px)'
+                e.target.style.boxShadow = '0 6px 16px rgba(30, 159, 245, 0.4)'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!loading) {
+                e.target.style.transform = 'translateY(0)'
+                e.target.style.boxShadow = '0 4px 12px rgba(30, 159, 245, 0.3)'
+              }
+            }}
           >
-            {loading ? 'Creating Session...' : 'Continue to Counselor Style Selection'}
+            {loading ? 'Creating Session...' : 'Continue to Counselor Style Selection →'}
           </button>
         </form>
       </div>

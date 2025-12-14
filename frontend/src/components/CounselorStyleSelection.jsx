@@ -10,8 +10,9 @@ const styleIcons = {
   reflective: Brain
 }
 
-export default function CounselorStyleSelection({ sessionId, onComplete }) {
-  const navigate = useNavigate()
+export default function CounselorStyleSelection({ sessionId, onComplete, navigate: customNavigate }) {
+  const routerNavigate = useNavigate()
+  const navigate = customNavigate || routerNavigate
   const [styles, setStyles] = useState([])
   const [selectedStyle, setSelectedStyle] = useState('')
   const [loading, setLoading] = useState(true)
@@ -54,21 +55,41 @@ export default function CounselorStyleSelection({ sessionId, onComplete }) {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="text-center">Loading counselor styles...</div>
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '40px 20px', textAlign: 'center' }}>
+        <div style={{ color: '#9ca3af' }}>Loading counselor styles...</div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Choose Your Counselor Style</h2>
-          <p className="text-gray-600">Select how you'd like to interact with your career counselor</p>
+    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
+      <div style={{
+        background: 'rgba(15, 23, 42, 0.8)',
+        borderRadius: '16px',
+        padding: '40px',
+        border: '1px solid rgba(30, 159, 245, 0.2)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h2 style={{ 
+            fontSize: '2.5rem', 
+            fontWeight: 700, 
+            color: '#e5e7eb', 
+            marginBottom: '8px' 
+          }}>
+            Choose Your Counselor <span style={{ color: '#10b981' }}>Style</span>
+          </h2>
+          <p style={{ color: '#9ca3af', fontSize: '1.1rem' }}>
+            Select how you'd like to interact with your career counselor
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          gap: '16px', 
+          marginBottom: '32px' 
+        }}>
           {styles.map((style) => {
             const Icon = styleIcons[style.id] || Smile
             const isSelected = selectedStyle === style.id
@@ -77,23 +98,67 @@ export default function CounselorStyleSelection({ sessionId, onComplete }) {
               <button
                 key={style.id}
                 onClick={() => setSelectedStyle(style.id)}
-                className={`p-6 rounded-xl border-2 transition-all text-left ${
-                  isSelected
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50'
-                }`}
+                style={{
+                  padding: '24px',
+                  borderRadius: '12px',
+                  border: `2px solid ${isSelected ? '#1e9ff5' : '#1f2937'}`,
+                  background: isSelected ? 'rgba(30, 159, 245, 0.1)' : 'rgba(15, 23, 42, 0.6)',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  transform: isSelected ? 'translateY(-2px)' : 'none',
+                  boxShadow: isSelected ? '0 4px 12px rgba(30, 159, 245, 0.3)' : 'none'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = '#3b82f6'
+                    e.currentTarget.style.background = 'rgba(30, 159, 245, 0.05)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSelected) {
+                    e.currentTarget.style.borderColor = '#1f2937'
+                    e.currentTarget.style.background = 'rgba(15, 23, 42, 0.6)'
+                  }
+                }}
               >
-                <div className="flex items-start space-x-4">
-                  <div className={`p-3 rounded-lg ${isSelected ? 'bg-primary-100' : 'bg-gray-100'}`}>
-                    <Icon className={`h-6 w-6 ${isSelected ? 'text-primary-600' : 'text-gray-600'}`} />
+                <div style={{ display: 'flex', alignItems: 'start', gap: '16px' }}>
+                  <div style={{
+                    padding: '12px',
+                    borderRadius: '8px',
+                    background: isSelected ? 'rgba(30, 159, 245, 0.2)' : 'rgba(31, 41, 55, 0.6)'
+                  }}>
+                    <Icon size={24} color={isSelected ? '#1e9ff5' : '#9ca3af'} />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg text-gray-900 mb-1">{style.name}</h3>
-                    <p className="text-sm text-gray-600">{style.description}</p>
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ 
+                      fontWeight: 600, 
+                      fontSize: '1.1rem', 
+                      color: '#e5e7eb', 
+                      marginBottom: '4px' 
+                    }}>
+                      {style.name}
+                    </h3>
+                    <p style={{ fontSize: '0.9rem', color: '#9ca3af' }}>
+                      {style.description}
+                    </p>
                   </div>
                   {isSelected && (
-                    <div className="w-5 h-5 rounded-full bg-primary-500 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
+                    <div style={{
+                      width: '20px',
+                      height: '20px',
+                      borderRadius: '50%',
+                      background: '#1e9ff5',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: '#ffffff'
+                      }}></div>
                     </div>
                   )}
                 </div>
@@ -105,9 +170,33 @@ export default function CounselorStyleSelection({ sessionId, onComplete }) {
         <button
           onClick={handleContinue}
           disabled={!selectedStyle || updating}
-          className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            width: '100%',
+            padding: '14px 24px',
+            borderRadius: '8px',
+            border: 'none',
+            background: (!selectedStyle || updating) ? '#6b7280' : 'linear-gradient(135deg, #1e9ff5, #3b82f6)',
+            color: '#ffffff',
+            fontWeight: 600,
+            fontSize: '1rem',
+            cursor: (!selectedStyle || updating) ? 'not-allowed' : 'pointer',
+            boxShadow: (!selectedStyle || updating) ? 'none' : '0 4px 12px rgba(30, 159, 245, 0.3)',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            if (selectedStyle && !updating) {
+              e.target.style.transform = 'translateY(-2px)'
+              e.target.style.boxShadow = '0 6px 16px rgba(30, 159, 245, 0.4)'
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (selectedStyle && !updating) {
+              e.target.style.transform = 'translateY(0)'
+              e.target.style.boxShadow = '0 4px 12px rgba(30, 159, 245, 0.3)'
+            }
+          }}
         >
-          {updating ? 'Updating...' : 'Continue to Stage 1 Questions'}
+          {updating ? 'Updating...' : 'Continue to Stage 1 Questions →'}
         </button>
       </div>
     </div>

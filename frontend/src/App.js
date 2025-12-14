@@ -6,6 +6,7 @@ import LandingPage from './LandingPage';
 import DashboardPage from './DashboardPage';
 import ResumeAnalyzer from './ResumeAnalyzer';
 import InterviewPrep from './InterviewPrep';
+import CareerCounseling from './CareerCounseling';
 
 function LandingWithNav() {
   const navigate = useNavigate();
@@ -58,6 +59,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <InterviewPrep />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/career-counseling" 
+            element={
+              <ProtectedRoute>
+                <CareerCounseling />
               </ProtectedRoute>
             } 
           />

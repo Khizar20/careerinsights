@@ -49,6 +49,13 @@ const NavBar = () => {
           >
             Interview Prep
           </span>
+          <span 
+            className={`ci-nav-link ${isActive('/career-counseling') ? 'ci-nav-link-active' : ''}`}
+            onClick={() => navigate('/career-counseling')}
+            style={{ cursor: 'pointer' }}
+          >
+            Career Counseling
+          </span>
         </div>
       </div>
       <div className="ci-navbar-right">

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { CheckCircle, Circle, BookOpen, Award, Target, TrendingUp } from 'lucide-react'
+import { CheckCircle, Circle, BookOpen, Award, Target, TrendingUp, Loader, RefreshCw } from 'lucide-react'
 import axios from 'axios'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
-export default function LearningPathway({ sessionId }) {
+export default function LearningPathway({ sessionId, onStartOver }) {
   const [pathwayData, setPathwayData] = useState(null)
   const [progress, setProgress] = useState(null)
   const [recommendations, setRecommendations] = useState(null)
@@ -13,52 +13,53 @@ export default function LearningPathway({ sessionId }) {
 
   const markdownComponents = {
     h1: ({ node, ...props }) => (
-      <h1 className="text-3xl font-bold mt-6 mb-4 text-gray-900" {...props} />
+      <h1 className="text-3xl font-bold mt-6 mb-4" style={{ color: '#e5e7eb' }} {...props} />
     ),
     h2: ({ node, ...props }) => (
-      <h2 className="text-2xl font-semibold mt-6 mb-3 text-gray-900" {...props} />
+      <h2 className="text-2xl font-semibold mt-6 mb-3" style={{ color: '#e5e7eb' }} {...props} />
     ),
     h3: ({ node, ...props }) => (
-      <h3 className="text-xl font-semibold mt-5 mb-3 text-gray-900" {...props} />
+      <h3 className="text-xl font-semibold mt-5 mb-3" style={{ color: '#e5e7eb' }} {...props} />
     ),
     h4: ({ node, ...props }) => (
-      <h4 className="text-lg font-semibold mt-4 mb-2 text-gray-900" {...props} />
+      <h4 className="text-lg font-semibold mt-4 mb-2" style={{ color: '#e5e7eb' }} {...props} />
     ),
     p: ({ node, ...props }) => (
-      <p className="mb-3 text-gray-700 leading-relaxed" {...props} />
+      <p className="mb-3 leading-relaxed" style={{ color: '#9ca3af' }} {...props} />
     ),
     strong: ({ node, ...props }) => (
-      <strong className="font-semibold text-gray-900" {...props} />
+      <strong className="font-semibold" style={{ color: '#e5e7eb' }} {...props} />
     ),
     em: ({ node, ...props }) => (
-      <em className="italic text-gray-800" {...props} />
+      <em className="italic" style={{ color: '#9ca3af' }} {...props} />
     ),
     ul: ({ node, ...props }) => (
-      <ul className="list-disc pl-6 mb-3 space-y-1 text-gray-700" {...props} />
+      <ul className="list-disc pl-6 mb-3 space-y-1" style={{ color: '#9ca3af' }} {...props} />
     ),
     ol: ({ node, ...props }) => (
-      <ol className="list-decimal pl-6 mb-3 space-y-1 text-gray-700" {...props} />
+      <ol className="list-decimal pl-6 mb-3 space-y-1" style={{ color: '#9ca3af' }} {...props} />
     ),
     li: ({ node, ...props }) => <li className="leading-relaxed" {...props} />,
     table: ({ node, ...props }) => (
       <div className="overflow-x-auto mb-4">
-        <table className="min-w-full border border-gray-200 text-sm" {...props} />
+        <table className="min-w-full border text-sm" style={{ borderColor: '#374151' }} {...props} />
       </div>
     ),
     thead: ({ node, ...props }) => (
-      <thead className="bg-gray-100" {...props} />
+      <thead style={{ background: '#1f2937' }} {...props} />
     ),
     th: ({ node, ...props }) => (
       <th
-        className="border border-gray-200 px-3 py-2 font-semibold text-gray-900 text-left"
+        className="px-3 py-2 font-semibold text-left border-b"
+        style={{ borderColor: '#374151', color: '#e5e7eb' }}
         {...props}
       />
     ),
     td: ({ node, ...props }) => (
-      <td className="border border-gray-200 px-3 py-2 align-top text-gray-700" {...props} />
+      <td className="px-3 py-2 align-top border-b" style={{ borderColor: '#374151', color: '#9ca3af' }} {...props} />
     ),
     a: ({ node, ...props }) => (
-      <a className="text-primary-600 hover:underline" target="_blank" rel="noreferrer" {...props} />
+      <a className="hover:underline" style={{ color: '#1e9ff5' }} target="_blank" rel="noreferrer" {...props} />
     )
   }
 
@@ -82,10 +83,6 @@ export default function LearningPathway({ sessionId }) {
   const updateProgress = async (type, item) => {
     setUpdating(true)
     try {
-      // Frontend logging for debugging progress updates
-      // eslint-disable-next-line no-console
-      console.log('[LearningPathway] updateProgress clicked', { type, item, progress })
-
       const updateData = {
         completed_courses: [...(progress?.completed_courses || [])],
         completed_certifications: [...(progress?.completed_certifications || [])],
@@ -123,15 +120,9 @@ export default function LearningPathway({ sessionId }) {
         }
       }
 
-      // eslint-disable-next-line no-console
-      console.log('[LearningPathway] sending progress update', updateData)
-
       await axios.post(`/api/session/${sessionId}/progress/update`, updateData)
-      // eslint-disable-next-line no-console
-      console.log('[LearningPathway] progress update saved')
       await fetchPathway()
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error('Error updating progress:', err)
     } finally {
       setUpdating(false)
@@ -141,7 +132,48 @@ export default function LearningPathway({ sessionId }) {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="text-center">Loading learning pathway...</div>
+        <div className="text-center" style={{ color: '#e5e7eb' }}>
+          <Loader className="h-8 w-8 animate-spin mx-auto mb-4" style={{ color: '#1e9ff5' }} />
+          <p>Loading your learning pathway...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!pathwayData || !progress) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="text-center" style={{ color: '#e5e7eb' }}>
+          <p className="mb-4">No learning pathway found for this session.</p>
+          {onStartOver && (
+            <button
+              onClick={onStartOver}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                border: '1px solid rgba(55, 65, 81, 0.5)',
+                background: 'rgba(31, 41, 55, 0.5)',
+                color: '#e5e7eb',
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(31, 41, 55, 0.7)'
+                e.target.style.borderColor = 'rgba(30, 159, 245, 0.3)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(31, 41, 55, 0.5)'
+                e.target.style.borderColor = 'rgba(55, 65, 81, 0.5)'
+              }}
+            >
+              <RefreshCw className="h-5 w-5" />
+              Start Over
+            </button>
+          )}
+        </div>
       </div>
     )
   }
@@ -151,22 +183,32 @@ export default function LearningPathway({ sessionId }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-xl p-10 mb-8">
+      <div style={{
+        background: 'rgba(15, 23, 42, 0.95)',
+        borderRadius: '16px',
+        padding: '40px',
+        border: '1px solid rgba(30, 159, 245, 0.2)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        marginBottom: '32px'
+      }}>
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Your Learning Pathway</h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-3xl font-bold mb-2" style={{ color: '#e5e7eb' }}>Your Learning Pathway</h2>
+          <p className="mb-6" style={{ color: '#9ca3af' }}>
             Personalized roadmap for {pathwayData?.career?.replace('_', ' ') || 'your career'}
           </p>
 
           <div className="max-w-md mx-auto">
-            <div className="flex justify-between text-sm text-gray-600 mb-2">
-              <span>Overall Progress</span>
-              <span>{progressPercentage.toFixed(1)}%</span>
+            <div className="flex justify-between text-sm mb-2">
+              <span style={{ color: '#9ca3af' }}>Overall Progress</span>
+              <span style={{ color: '#e5e7eb', fontWeight: 600 }}>{progressPercentage.toFixed(1)}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-4">
+            <div className="w-full rounded-full h-4" style={{ background: '#374151' }}>
               <div
-                className="bg-gradient-to-r from-primary-500 to-primary-600 h-4 rounded-full transition-all duration-500 flex items-center justify-end pr-2"
-                style={{ width: `${progressPercentage}%` }}
+                className="h-4 rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+                style={{ 
+                  width: `${Math.min(progressPercentage, 100)}%`,
+                  background: 'linear-gradient(90deg, #1e9ff5, #1155c4)'
+                }}
               >
                 {progressPercentage > 10 && (
                   <span className="text-xs text-white font-semibold">{progressPercentage.toFixed(0)}%</span>
@@ -178,33 +220,38 @@ export default function LearningPathway({ sessionId }) {
 
         {isComplete && (
           <div className="mb-10 relative">
-            {/* Floating balloon-like decorations */}
-            <div className="pointer-events-none absolute inset-0 overflow-hidden">
-              <div className="absolute left-6 bottom-0 w-6 h-9 bg-pink-400 rounded-full animate-bounce opacity-80 shadow-md" />
-              <div className="absolute left-16 bottom-4 w-5 h-8 bg-purple-400 rounded-full animate-bounce opacity-80 shadow-md delay-150" />
-              <div className="absolute right-10 bottom-2 w-7 h-10 bg-emerald-400 rounded-full animate-bounce opacity-80 shadow-md delay-200" />
-              <div className="absolute right-4 bottom-8 w-5 h-8 bg-blue-400 rounded-full animate-bounce opacity-80 shadow-md delay-300" />
-            </div>
-
-            <div className="relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 via-emerald-100 to-emerald-50 p-6 flex items-center">
-              <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-emerald-200 opacity-40 blur-3xl" />
-              <div className="absolute -left-10 -bottom-10 w-32 h-32 rounded-full bg-emerald-300 opacity-30 blur-3xl" />
-              <div className="relative flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg animate-bounce">
-                    <CheckCircle className="h-7 w-7 text-white" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-emerald-900 mb-1">
-                    Congratulations! You’ve completed your learning pathway.
-                  </h3>
-                  <p className="text-sm text-emerald-800">
-                    You’ve marked all courses, certifications, skills, and milestones as complete. Take a moment to
-                    celebrate your progress, then consider revisiting key topics, starting a new pathway, or applying
-                    your skills in real-world projects and job applications.
-                  </p>
-                </div>
+            <div style={{
+              overflow: 'hidden',
+              borderRadius: '12px',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15))',
+              padding: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px'
+            }}>
+              <div style={{
+                flexShrink: 0,
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                background: '#10b981',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+              }}>
+                <CheckCircle className="h-7 w-7 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-1" style={{ color: '#10b981' }}>
+                  Congratulations! You've completed your learning pathway.
+                </h3>
+                <p className="text-sm" style={{ color: '#9ca3af' }}>
+                  You've marked all courses, certifications, skills, and milestones as complete. Take a moment to
+                  celebrate your progress, then consider revisiting key topics, starting a new pathway, or applying
+                  your skills in real-world projects and job applications.
+                </p>
               </div>
             </div>
           </div>
@@ -212,15 +259,23 @@ export default function LearningPathway({ sessionId }) {
 
         {pathwayData?.phases && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-              <Target className="h-5 w-5 text-primary-600" />
-              <span>Learning Phases</span>
+            <h3 className="text-xl font-bold mb-4 flex items-center space-x-2">
+              <Target className="h-5 w-5" style={{ color: '#1e9ff5' }} />
+              <span style={{ color: '#e5e7eb' }}>Learning Phases</span>
             </h3>
             <div className="space-y-4">
               {Object.entries(pathwayData.phases).map(([phase, description]) => (
-                <div key={phase} className="border border-gray-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-900 capitalize mb-2">{phase}</h4>
-                  <p className="text-sm text-gray-600">{description}</p>
+                <div 
+                  key={phase} 
+                  style={{
+                    border: '1px solid rgba(55, 65, 81, 0.5)',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    background: 'rgba(31, 41, 55, 0.3)'
+                  }}
+                >
+                  <h4 className="font-semibold capitalize mb-2" style={{ color: '#e5e7eb' }}>{phase}</h4>
+                  <p className="text-sm" style={{ color: '#9ca3af' }}>{description}</p>
                 </div>
               ))}
             </div>
@@ -229,9 +284,9 @@ export default function LearningPathway({ sessionId }) {
 
         {pathwayData?.courses && pathwayData.courses.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-              <BookOpen className="h-5 w-5 text-primary-600" />
-              <span>Recommended Courses</span>
+            <h3 className="text-xl font-bold mb-4 flex items-center space-x-2">
+              <BookOpen className="h-5 w-5" style={{ color: '#1e9ff5' }} />
+              <span style={{ color: '#e5e7eb' }}>Recommended Courses</span>
             </h3>
             <div className="space-y-2">
               {pathwayData.courses.map((course, idx) => {
@@ -239,25 +294,56 @@ export default function LearningPathway({ sessionId }) {
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center justify-between p-4 rounded-lg border-2 ${
-                      isCompleted ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'
-                    }`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px',
+                      borderRadius: '8px',
+                      border: isCompleted ? '2px solid rgba(16, 185, 129, 0.3)' : '2px solid rgba(55, 65, 81, 0.5)',
+                      background: isCompleted ? 'rgba(16, 185, 129, 0.1)' : 'rgba(31, 41, 55, 0.3)',
+                      transition: 'all 0.2s'
+                    }}
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-3 flex-1">
                       {isCompleted ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5" style={{ color: '#10b981' }} />
                       ) : (
-                        <Circle className="h-5 w-5 text-gray-400" />
+                        <Circle className="h-5 w-5" style={{ color: '#6b7280' }} />
                       )}
-                      <div className="flex flex-col">
-                        <span className={isCompleted ? 'line-through text-gray-500' : 'text-gray-900'}>
+                      <div className="flex flex-col flex-1">
+                        <span style={{ 
+                          color: isCompleted ? '#6b7280' : '#e5e7eb',
+                          textDecoration: isCompleted ? 'line-through' : 'none'
+                        }}>
                           {course}
                         </span>
                         <a
                           href={`https://www.google.com/search?q=${encodeURIComponent(course)}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center justify-center px-2.5 py-1 mt-1 text-xs font-medium rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 border border-primary-100 w-40"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '4px 10px',
+                            marginTop: '8px',
+                            fontSize: '0.75rem',
+                            fontWeight: 500,
+                            borderRadius: '999px',
+                            background: 'rgba(30, 159, 245, 0.15)',
+                            color: '#1e9ff5',
+                            border: '1px solid rgba(30, 159, 245, 0.3)',
+                            width: 'fit-content',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.background = 'rgba(30, 159, 245, 0.25)'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.background = 'rgba(30, 159, 245, 0.15)'
+                          }}
                           onClick={(e) => e.stopPropagation()}
                         >
                           Open course link
@@ -267,13 +353,30 @@ export default function LearningPathway({ sessionId }) {
                     <button
                       onClick={() => updateProgress('course', course)}
                       disabled={updating}
-                      className="text-sm font-medium w-40 text-right"
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: 'none',
+                        cursor: updating ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s',
+                        background: isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)',
+                        color: isCompleted ? '#9ca3af' : '#1e9ff5',
+                        opacity: updating ? 0.5 : 1
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.7)' : 'rgba(30, 159, 245, 0.3)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)'
+                        }
+                      }}
                     >
-                      {isCompleted ? (
-                        <span className="text-gray-500 hover:text-gray-700">Mark Incomplete</span>
-                      ) : (
-                        <span className="text-primary-600 hover:text-primary-700">Mark Complete</span>
-                      )}
+                      {isCompleted ? 'Mark Incomplete' : 'Mark Complete'}
                     </button>
                   </div>
                 )
@@ -284,9 +387,9 @@ export default function LearningPathway({ sessionId }) {
 
         {pathwayData?.certifications && pathwayData.certifications.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-              <Award className="h-5 w-5 text-primary-600" />
-              <span>Certifications</span>
+            <h3 className="text-xl font-bold mb-4 flex items-center space-x-2">
+              <Award className="h-5 w-5" style={{ color: '#1e9ff5' }} />
+              <span style={{ color: '#e5e7eb' }}>Certifications</span>
             </h3>
             <div className="space-y-2">
               {pathwayData.certifications.map((cert, idx) => {
@@ -294,25 +397,56 @@ export default function LearningPathway({ sessionId }) {
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center justify-between p-4 rounded-lg border-2 ${
-                      isCompleted ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'
-                    }`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px',
+                      borderRadius: '8px',
+                      border: isCompleted ? '2px solid rgba(16, 185, 129, 0.3)' : '2px solid rgba(55, 65, 81, 0.5)',
+                      background: isCompleted ? 'rgba(16, 185, 129, 0.1)' : 'rgba(31, 41, 55, 0.3)',
+                      transition: 'all 0.2s'
+                    }}
                   >
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-3 flex-1">
                       {isCompleted ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5" style={{ color: '#10b981' }} />
                       ) : (
-                        <Circle className="h-5 w-5 text-gray-400" />
+                        <Circle className="h-5 w-5" style={{ color: '#6b7280' }} />
                       )}
-                      <div className="flex flex-col">
-                        <span className={isCompleted ? 'line-through text-gray-500' : 'text-gray-900'}>
+                      <div className="flex flex-col flex-1">
+                        <span style={{ 
+                          color: isCompleted ? '#6b7280' : '#e5e7eb',
+                          textDecoration: isCompleted ? 'line-through' : 'none'
+                        }}>
                           {cert}
                         </span>
                         <a
                           href={`https://www.google.com/search?q=${encodeURIComponent(cert)}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center justify-center px-2.5 py-1 mt-1 text-xs font-medium rounded-full bg-primary-50 text-primary-700 hover:bg-primary-100 border border-primary-100 w-40"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '4px 10px',
+                            marginTop: '8px',
+                            fontSize: '0.75rem',
+                            fontWeight: 500,
+                            borderRadius: '999px',
+                            background: 'rgba(30, 159, 245, 0.15)',
+                            color: '#1e9ff5',
+                            border: '1px solid rgba(30, 159, 245, 0.3)',
+                            width: 'fit-content',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.background = 'rgba(30, 159, 245, 0.25)'
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.background = 'rgba(30, 159, 245, 0.15)'
+                          }}
                           onClick={(e) => e.stopPropagation()}
                         >
                           Open certification link
@@ -322,13 +456,30 @@ export default function LearningPathway({ sessionId }) {
                     <button
                       onClick={() => updateProgress('certification', cert)}
                       disabled={updating}
-                      className="text-sm font-medium w-40 text-right"
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: 'none',
+                        cursor: updating ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s',
+                        background: isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)',
+                        color: isCompleted ? '#9ca3af' : '#1e9ff5',
+                        opacity: updating ? 0.5 : 1
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.7)' : 'rgba(30, 159, 245, 0.3)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)'
+                        }
+                      }}
                     >
-                      {isCompleted ? (
-                        <span className="text-gray-500 hover:text-gray-700">Mark Incomplete</span>
-                      ) : (
-                        <span className="text-primary-600 hover:text-primary-700">Mark Complete</span>
-                      )}
+                      {isCompleted ? 'Mark Incomplete' : 'Mark Complete'}
                     </button>
                   </div>
                 )
@@ -339,9 +490,9 @@ export default function LearningPathway({ sessionId }) {
 
         {pathwayData?.skills && pathwayData.skills.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-              <Target className="h-5 w-5 text-primary-600" />
-              <span>Key Skills to Develop</span>
+            <h3 className="text-xl font-bold mb-4 flex items-center space-x-2">
+              <Target className="h-5 w-5" style={{ color: '#1e9ff5' }} />
+              <span style={{ color: '#e5e7eb' }}>Key Skills to Develop</span>
             </h3>
             <div className="space-y-2">
               {pathwayData.skills.map((skill, idx) => {
@@ -349,30 +500,57 @@ export default function LearningPathway({ sessionId }) {
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center justify-between p-4 rounded-lg border-2 ${
-                      isCompleted ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'
-                    }`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px',
+                      borderRadius: '8px',
+                      border: isCompleted ? '2px solid rgba(16, 185, 129, 0.3)' : '2px solid rgba(55, 65, 81, 0.5)',
+                      background: isCompleted ? 'rgba(16, 185, 129, 0.1)' : 'rgba(31, 41, 55, 0.3)',
+                      transition: 'all 0.2s'
+                    }}
                   >
                     <div className="flex items-center space-x-3">
                       {isCompleted ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5" style={{ color: '#10b981' }} />
                       ) : (
-                        <Circle className="h-5 w-5 text-gray-400" />
+                        <Circle className="h-5 w-5" style={{ color: '#6b7280' }} />
                       )}
-                      <span className={isCompleted ? 'line-through text-gray-500' : 'text-gray-900'}>
+                      <span style={{ 
+                        color: isCompleted ? '#6b7280' : '#e5e7eb',
+                        textDecoration: isCompleted ? 'line-through' : 'none'
+                      }}>
                         {skill}
                       </span>
                     </div>
                     <button
                       onClick={() => updateProgress('skill', skill)}
                       disabled={updating}
-                      className="text-sm font-medium"
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: 'none',
+                        cursor: updating ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s',
+                        background: isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)',
+                        color: isCompleted ? '#9ca3af' : '#1e9ff5',
+                        opacity: updating ? 0.5 : 1
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.7)' : 'rgba(30, 159, 245, 0.3)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)'
+                        }
+                      }}
                     >
-                      {isCompleted ? (
-                        <span className="text-gray-500 hover:text-gray-700">Mark Incomplete</span>
-                      ) : (
-                        <span className="text-primary-600 hover:text-primary-700">Mark Complete</span>
-                      )}
+                      {isCompleted ? 'Mark Incomplete' : 'Mark Complete'}
                     </button>
                   </div>
                 )
@@ -383,9 +561,9 @@ export default function LearningPathway({ sessionId }) {
 
         {pathwayData?.milestones && pathwayData.milestones.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-              <TrendingUp className="h-5 w-5 text-primary-600" />
-              <span>Milestones</span>
+            <h3 className="text-xl font-bold mb-4 flex items-center space-x-2">
+              <TrendingUp className="h-5 w-5" style={{ color: '#1e9ff5' }} />
+              <span style={{ color: '#e5e7eb' }}>Milestones</span>
             </h3>
             <div className="space-y-2">
               {pathwayData.milestones.map((milestone, idx) => {
@@ -393,30 +571,57 @@ export default function LearningPathway({ sessionId }) {
                 return (
                   <div
                     key={idx}
-                    className={`flex items-center justify-between p-4 rounded-lg border-2 ${
-                      isCompleted ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'
-                    }`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '16px',
+                      borderRadius: '8px',
+                      border: isCompleted ? '2px solid rgba(16, 185, 129, 0.3)' : '2px solid rgba(55, 65, 81, 0.5)',
+                      background: isCompleted ? 'rgba(16, 185, 129, 0.1)' : 'rgba(31, 41, 55, 0.3)',
+                      transition: 'all 0.2s'
+                    }}
                   >
                     <div className="flex items-center space-x-3">
                       {isCompleted ? (
-                        <CheckCircle className="h-5 w-5 text-green-500" />
+                        <CheckCircle className="h-5 w-5" style={{ color: '#10b981' }} />
                       ) : (
-                        <Circle className="h-5 w-5 text-gray-400" />
+                        <Circle className="h-5 w-5" style={{ color: '#6b7280' }} />
                       )}
-                      <span className={isCompleted ? 'line-through text-gray-500' : 'text-gray-900'}>
+                      <span style={{ 
+                        color: isCompleted ? '#6b7280' : '#e5e7eb',
+                        textDecoration: isCompleted ? 'line-through' : 'none'
+                      }}>
                         {milestone}
                       </span>
                     </div>
                     <button
                       onClick={() => updateProgress('milestone', milestone)}
                       disabled={updating}
-                      className="text-sm font-medium"
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 500,
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: 'none',
+                        cursor: updating ? 'not-allowed' : 'pointer',
+                        transition: 'all 0.2s',
+                        background: isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)',
+                        color: isCompleted ? '#9ca3af' : '#1e9ff5',
+                        opacity: updating ? 0.5 : 1
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.7)' : 'rgba(30, 159, 245, 0.3)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!updating) {
+                          e.target.style.background = isCompleted ? 'rgba(55, 65, 81, 0.5)' : 'rgba(30, 159, 245, 0.2)'
+                        }
+                      }}
                     >
-                      {isCompleted ? (
-                        <span className="text-gray-500 hover:text-gray-700">Mark Incomplete</span>
-                      ) : (
-                        <span className="text-primary-600 hover:text-primary-700">Mark Complete</span>
-                      )}
+                      {isCompleted ? 'Mark Incomplete' : 'Mark Complete'}
                     </button>
                   </div>
                 )
@@ -427,35 +632,53 @@ export default function LearningPathway({ sessionId }) {
 
         {recommendations?.recommendations && recommendations.recommendations.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-              <TrendingUp className="h-5 w-5 text-primary-600" />
-              <span>Adaptive Recommendations</span>
+            <h3 className="text-xl font-bold mb-4 flex items-center space-x-2">
+              <TrendingUp className="h-5 w-5" style={{ color: '#1e9ff5' }} />
+              <span style={{ color: '#e5e7eb' }}>Adaptive Recommendations</span>
             </h3>
             <div className="space-y-3">
               {recommendations.recommendations.map((rec, idx) => (
                 <div
                   key={idx}
-                  className={`p-4 rounded-lg border-l-4 ${
-                    rec.priority === 'high'
-                      ? 'border-red-500 bg-red-50'
+                  style={{
+                    padding: '16px',
+                    borderRadius: '8px',
+                    borderLeft: `4px solid ${
+                      rec.priority === 'high'
+                        ? '#ef4444'
+                        : rec.priority === 'medium'
+                        ? '#f59e0b'
+                        : '#1e9ff5'
+                    }`,
+                    background: rec.priority === 'high'
+                      ? 'rgba(239, 68, 68, 0.1)'
                       : rec.priority === 'medium'
-                      ? 'border-yellow-500 bg-yellow-50'
-                      : 'border-blue-500 bg-blue-50'
-                  }`}
+                      ? 'rgba(245, 158, 11, 0.1)'
+                      : 'rgba(30, 159, 245, 0.1)'
+                  }}
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">{rec.title}</h4>
-                      <p className="text-sm text-gray-600">{rec.description}</p>
+                      <h4 className="font-semibold mb-1" style={{ color: '#e5e7eb' }}>{rec.title}</h4>
+                      <p className="text-sm" style={{ color: '#9ca3af' }}>{rec.description}</p>
                     </div>
                     <span
-                      className={`px-2 py-1 rounded text-xs font-semibold ${
-                        rec.priority === 'high'
-                          ? 'bg-red-100 text-red-700'
+                      style={{
+                        padding: '4px 8px',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        background: rec.priority === 'high'
+                          ? 'rgba(239, 68, 68, 0.2)'
                           : rec.priority === 'medium'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-blue-100 text-blue-700'
-                      }`}
+                          ? 'rgba(245, 158, 11, 0.2)'
+                          : 'rgba(30, 159, 245, 0.2)',
+                        color: rec.priority === 'high'
+                          ? '#f87171'
+                          : rec.priority === 'medium'
+                          ? '#fbbf24'
+                          : '#1e9ff5'
+                      }}
                     >
                       {rec.priority}
                     </span>
@@ -467,11 +690,17 @@ export default function LearningPathway({ sessionId }) {
         )}
 
         {pathwayData?.description && (
-          <div className="mt-10 p-8 bg-gray-50 rounded-2xl border border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          <div style={{
+            marginTop: '40px',
+            padding: '32px',
+            background: 'rgba(31, 41, 55, 0.5)',
+            borderRadius: '12px',
+            border: '1px solid rgba(55, 65, 81, 0.5)'
+          }}>
+            <h3 className="text-xl font-semibold mb-4" style={{ color: '#e5e7eb' }}>
               Detailed Learning Pathway
             </h3>
-            <div className="max-w-none text-gray-800">
+            <div className="max-w-none">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={markdownComponents}
@@ -481,8 +710,39 @@ export default function LearningPathway({ sessionId }) {
             </div>
           </div>
         )}
+
+        {onStartOver && (
+          <div className="mt-8 text-center">
+            <button
+              onClick={onStartOver}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                border: '1px solid rgba(55, 65, 81, 0.5)',
+                background: 'rgba(31, 41, 55, 0.5)',
+                color: '#e5e7eb',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                fontWeight: 500
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(31, 41, 55, 0.7)'
+                e.target.style.borderColor = 'rgba(30, 159, 245, 0.3)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(31, 41, 55, 0.5)'
+                e.target.style.borderColor = 'rgba(55, 65, 81, 0.5)'
+              }}
+            >
+              <RefreshCw className="h-5 w-5" />
+              Start New Counseling Session
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
 }
-
