@@ -2,7 +2,8 @@
 
 ## Your Connection String
 ```
-mongodb+srv://frhanaliawan5_db_user:4mDZpchShSOIGgpQ@cluster0.f1ipikg.mongodb.net/?appName=Cluster0
+# Replace with your MongoDB Atlas connection string
+# Format: mongodb+srv://username:password@cluster.mongodb.net/
 ```
 
 ## Common SSL Handshake Errors & Solutions
@@ -62,7 +63,8 @@ To test if your MongoDB connection works:
 
 ```python
 from pymongo import MongoClient
-uri = "mongodb+srv://frhanaliawan5_db_user:4mDZpchShSOIGgpQ@cluster0.f1ipikg.mongodb.net/?appName=Cluster0"
+# Replace with your MongoDB Atlas connection string
+uri = "mongodb+srv://username:password@cluster.mongodb.net/"
 client = MongoClient(uri, serverSelectionTimeoutMS=10000)
 client.admin.command('ping')
 print("✅ Connected!")
